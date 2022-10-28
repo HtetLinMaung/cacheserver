@@ -10,5 +10,5 @@ services:
       - request_body_size=2gb
     restart: always
     volumes:
-      - /app/cacheserver/settings.json:/app/settings.json
-      - /app/cacheserver/domains.json:/app/domains.json
+      - /home/hlm/app/cacheserver/settings.json:/app/settings.json
+      - /home/hlm/app/cacheserver/domains.json:/app/domains.json
