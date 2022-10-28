@@ -10,5 +10,5 @@ services:
       - request_body_size=2gb
     restart: always
     volumes:
-      - /settings.json:/app/settings.json
-      - /domains.json:/app/domains.json
+      - /app/cacheserver/settings.json:/app/settings.json
+      - /app/cacheserver/domains.json:/app/domains.json
