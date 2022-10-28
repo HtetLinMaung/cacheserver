@@ -1,0 +1,18 @@
+{
+  "ibanking": {
+    "excludes": [
+      {
+        "url": "/*",
+        "method": "put"
+      },
+      {
+        "url": "/*",
+        "method": "delete"
+      },
+      {
+        "url": "/*",
+        "method": "patch"
+      }
+    ]
+  }
+}

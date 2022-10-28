@@ -1,0 +1,24 @@
+{
+  "name": "cacheserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "starless-server start",
+    "dev": "nodemon node_modules/starless-server start",
+    "lint-init": "eslint --init"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "nodemon": "^2.0.20",
+    "starless-server": "^1.9.7"
+  },
+  "dependencies": {
+    "code-alchemy": "^1.1.8",
+    "starless-http": "^1.0.0",
+    "uuid": "^9.0.0"
+  }
+}

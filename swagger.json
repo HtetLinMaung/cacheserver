@@ -1,0 +1,53 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OpenAPI 3.0",
+    "description": "",
+    "version": "1.0.11"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "routes",
+      "description": "Everything about your Routes"
+    }
+  ],
+  "paths": {
+    "/:path": {
+      "get": {
+        "tags": [
+          "routes"
+        ],
+        "operationId": "get:path"
+      },
+      "post": {
+        "tags": [
+          "routes"
+        ],
+        "operationId": "post:path"
+      },
+      "put": {
+        "tags": [
+          "routes"
+        ],
+        "operationId": "put:path"
+      },
+      "patch": {
+        "tags": [
+          "routes"
+        ],
+        "operationId": "patch:path"
+      },
+      "delete": {
+        "tags": [
+          "routes"
+        ],
+        "operationId": "delete:path"
+      }
+    }
+  }
+}

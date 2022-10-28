@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  cacheserver:
+    image: htetlinmaung/cacheserver
+    build: .
+    ports:
+      - "3030:3000"
+    environment:
+      - request_body_size=2gb
+    restart: always
+    volumes:
+      - /settings.json:/app/settings.json
+      - /domains.json:/app/domains.json
