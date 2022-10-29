@@ -68,6 +68,10 @@
       {
         "url": "verify",
         "method": "post"
+      },
+      {
+        "url": "getmoduletoken",
+        "method": "post"
       }
     ]
   },
