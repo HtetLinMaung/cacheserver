@@ -56,6 +56,18 @@
       {
         "url": "paybill",
         "method": "post"
+      },
+      {
+        "url": "validate",
+        "method": "post"
+      },
+      {
+        "url": "void",
+        "method": "post"
+      },
+      {
+        "url": "verify",
+        "method": "post"
       }
     ]
   },
