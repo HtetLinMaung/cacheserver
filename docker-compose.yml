@@ -8,6 +8,7 @@ services:
       - "3030:3000"
     environment:
       - request_body_size=2gb
+      - worker_processes=auto
     restart: always
     volumes:
       - /home/hlm/app/cacheserver/settings.json:/app/settings.json
