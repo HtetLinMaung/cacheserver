@@ -12,6 +12,66 @@
       {
         "url": "/*",
         "method": "patch"
+      },
+      {
+        "url": "save",
+        "method": "post"
+      },
+      {
+        "url": "create",
+        "method": "post"
+      },
+      {
+        "url": "add",
+        "method": "post"
+      },
+      {
+        "url": "transfer",
+        "method": "post"
+      },
+      {
+        "url": "request",
+        "method": "post"
+      },
+      {
+        "url": "save",
+        "method": "post"
+      },
+      {
+        "url": "open",
+        "method": "post"
+      },
+      {
+        "url": "notify",
+        "method": "post"
+      },
+      {
+        "url": "calculate",
+        "method": "post"
+      },
+      {
+        "url": "topupmobile",
+        "method": "post"
+      },
+      {
+        "url": "paybill",
+        "method": "post"
+      }
+    ]
+  },
+  "adminconsole": {
+    "excludes": [
+      {
+        "url": "/*",
+        "method": "put"
+      },
+      {
+        "url": "/*",
+        "method": "delete"
+      },
+      {
+        "url": "/*",
+        "method": "patch"
       }
     ]
   }
