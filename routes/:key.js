@@ -2,13 +2,12 @@ const { default: http } = require("starless-http");
 const { brewBlankExpressFunc } = require("code-alchemy");
 const domains = require("../domains.json");
 const settings = require("../settings.json");
-const { cache } = require("../variables");
 const fs = require("node:fs");
 const { domainsJsonPath, settingsJsonPath } = require("../constants");
 const { default: server } = require("starless-server");
-// const { v4 } = require("uuid");
 
 module.exports = brewBlankExpressFunc(async (req, res) => {
+  const { sharedMemory } = server;
   let { key } = req.params;
 
   const method = req.method.toLowerCase();
@@ -17,7 +16,7 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     return res.json({
       code: 200,
       message: "Successful",
-      data: cache,
+      data: sharedMemory.getAll(),
     });
   } else if (key == "add-domain" && method == "post") {
     for (const [key, value] of Object.entries(req.body)) {
@@ -64,17 +63,19 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
 
   const cacheKey = JSON.stringify(cacheKeyData);
 
-  if (cacheKey in cache) {
-    for (const [key, value] of Object.entries(cache[cacheKey].headers)) {
+  if (sharedMemory.get(cacheKey)) {
+    for (const [key, value] of Object.entries(
+      sharedMemory.get(cacheKey).headers
+    )) {
       if (key.toLowerCase() != "transfer-encoding") {
         res.setHeader(key, value);
       }
     }
-    if (typeof cache[cacheKey].data == "object") {
+    if (typeof sharedMemory.get(cacheKey).data == "object") {
       res.setHeader("Content-Type", "application/json");
     }
 
-    res.send(cache[cacheKey].data);
+    res.send(sharedMemory.get(cacheKey).data);
   }
 
   let response = null;
@@ -101,7 +102,7 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     }
   }
   console.log(response.data);
-  if (!(cacheKey in cache)) {
+  if (!sharedMemory.get(cacheKey)) {
     if ("headers" in response) {
       for (const [key, value] of Object.entries(response.headers)) {
         if (key.toLowerCase() != "transfer-encoding") {
@@ -114,7 +115,7 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     }
   }
 
-  if (!(cacheKey in cache)) {
+  if (!sharedMemory.get(cacheKey)) {
     res.send(response.data);
   }
   let skipCache = false;
@@ -130,16 +131,17 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     }
   }
   if (response.status < 400 && !skipCache) {
-    cache[cacheKey] = {
+    sharedMemory.set(cacheKey, {
       data: response.data,
       headers: "headers" in response ? response.headers : {},
-    };
+    });
+
     io.emit("cache:update", {
       url: req.baseUrl + req.url,
       method: cacheKeyData.method,
     });
   }
   if (skipCache) {
-    delete cache[cacheKey];
+    sharedMemory.set(cacheKey, null);
   }
 });

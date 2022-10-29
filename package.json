@@ -14,9 +14,10 @@
   "devDependencies": {
     "eslint": "^8.26.0",
     "nodemon": "^2.0.20",
-    "starless-server": "^1.10.2"
+    "starless-server": "^1.10.8"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "code-alchemy": "^1.1.8",
     "starless-http": "^1.0.0",
     "uuid": "^9.0.0"
