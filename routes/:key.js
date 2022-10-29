@@ -54,7 +54,7 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
   const baseUrl = domains[key];
 
   delete req.headers["postman-token"];
-  const cacheKey = {
+  const cacheKeyData = {
     query: req.query,
     body: req.body,
     headers: req.headers,
@@ -62,23 +62,19 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     url: `${baseUrl}${req.url}`,
   };
 
-  // if (!(JSON.stringify(cacheKey) in cacheIds)) {
-  //   cacheIds[JSON.stringify(cacheKey)] = v4();
-  // }
+  const cacheKey = JSON.stringify(cacheKeyData);
 
-  if (JSON.stringify(cacheKey) in cache) {
-    for (const [key, value] of Object.entries(
-      cache[JSON.stringify(cacheKey)].headers
-    )) {
+  if (cacheKey in cache) {
+    for (const [key, value] of Object.entries(cache[cacheKey].headers)) {
       if (key.toLowerCase() != "transfer-encoding") {
         res.setHeader(key, value);
       }
     }
-    if (typeof cache[JSON.stringify(cacheKey)].data == "object") {
+    if (typeof cache[cacheKey].data == "object") {
       res.setHeader("Content-Type", "application/json");
     }
 
-    res.send(cache[JSON.stringify(cacheKey)].data);
+    res.send(cache[cacheKey].data);
   }
 
   let response = null;
@@ -105,7 +101,7 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     }
   }
   console.log(response.data);
-  if (!(JSON.stringify(cacheKey) in cache)) {
+  if (!(cacheKey in cache)) {
     if ("headers" in response) {
       for (const [key, value] of Object.entries(response.headers)) {
         if (key.toLowerCase() != "transfer-encoding") {
@@ -118,26 +114,32 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     }
   }
 
-  if (!(JSON.stringify(cacheKey) in cache)) {
+  if (!(cacheKey in cache)) {
     res.send(response.data);
   }
   let skipCache = false;
   if (key in settings && "excludes" in settings[key]) {
     for (const item of settings[key].excludes) {
-      if (cacheKey.url.match(new RegExp(item.url)) && method == item.method) {
+      if (
+        cacheKeyData.url.match(new RegExp(item.url)) &&
+        method == item.method
+      ) {
         skipCache = true;
         break;
       }
     }
   }
   if (response.status < 400 && !skipCache) {
-    cache[JSON.stringify(cacheKey)] = {
+    cache[cacheKey] = {
       data: response.data,
       headers: "headers" in response ? response.headers : {},
     };
     io.emit("cache:update", {
       url: req.baseUrl + req.url,
-      method: cacheKey.method,
+      method: cacheKeyData.method,
     });
+  }
+  if (skipCache) {
+    delete cache[cacheKey];
   }
 });
