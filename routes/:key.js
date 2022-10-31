@@ -81,7 +81,7 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
   let response = null;
   let err = null;
   const options = {
-    params: req.query,
+    // params: req.query,
     headers: req.headers,
   };
   if (method == "get" || method == "delete") {
