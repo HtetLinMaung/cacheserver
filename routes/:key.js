@@ -131,15 +131,17 @@ module.exports = brewBlankExpressFunc(async (req, res) => {
     }
   }
   if (response.status < 400 && !skipCache) {
-    sharedMemory.set(cacheKey, {
+    const newCacheData = {
       data: response.data,
       headers: "headers" in response ? response.headers : {},
-    });
-
-    io.emit("cache:update", {
-      url: req.baseUrl + req.url,
-      method: cacheKeyData.method,
-    });
+    };
+    sharedMemory.set(cacheKey, newCacheData);
+    if (
+      cacheKeyData &&
+      JSON.stringify(newCacheData) != JSON.stringify(cacheKeyData)
+    ) {
+      io.emit("cache:update", req.query.cachesession);
+    }
   }
   if (skipCache) {
     sharedMemory.set(cacheKey, null);
